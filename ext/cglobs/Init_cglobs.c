@@ -10,6 +10,9 @@ VALUE rb_globs_expand(VALUE self, VALUE str) {
   return array;
 }
 
+/**
+ * Add `Globs.expands_c` methods in Ruby
+ */
 void Init_cglobs() {
   VALUE mod = rb_define_module("Globs");
   printf("hello from C\n");

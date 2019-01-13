@@ -96,6 +96,27 @@ module Globs
     results
   end
 
+  # Expands a glob-like string into all possible interpretations of it. This is
+  # a rewritten version in C lang.
+  #
+  # @since 0.0.5
+  #
+  # @example
+  #
+  #   ```
+  #   Globs.expand_c("test.{a, b}.{1, 2}.com")
+  #   => ["test.a.1.com", "test.a.2.com", "test.b.1.com", "test.b.2.com"]
+  #   ```
+  #
+  # @param string [String]
+  #   Glob-like string to be expanded
+  #
+  # @return [Array[String]]
+  #   All expansions of the glob-like string
+  def expands_c
+    # Implemented as C extension
+  end
+
   # Finds the beginning and end of the next expression set in the string. If
   # an expression set is not found, it will return END_OF_STRING for either
   # of the positions being absent.
