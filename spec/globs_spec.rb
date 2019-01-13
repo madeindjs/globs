@@ -46,8 +46,10 @@ RSpec.describe Globs do
   end
 
   context "C version" do
-    it 'should compile' do
-      expect( Globs.cprint 'test.{a..c}.{1, 2}.com' ).to include('Printed from C')
+    
+    it 'does not expand a normal string' do
+      expect(Globs.expands_c('a_normal_string')).to eq(%w(a_normal_string))
     end
+
   end
 end
