@@ -3,43 +3,51 @@ RSpec.describe Globs do
     expect(Globs::VERSION).not_to be nil
   end
 
-  it 'does not expand a normal string' do
-    expect(Globs.expand('a_normal_string')).to eq(%w(a_normal_string))
+  context "Pure Ruby version" do
+    it 'does not expand a normal string' do
+      expect(Globs.expand('a_normal_string')).to eq(%w(a_normal_string))
+    end
+
+    it 'can expand a single set' do
+      expect(
+        Globs.expand('test.{a, b, c}.com')
+      ).to eq(%w(
+        test.a.com
+        test.b.com
+        test.c.com
+      ))
+    end
+
+    it 'can expand multiple sets' do
+      expect(
+        Globs.expand('test.{a, b, c}.{1, 2}.com')
+      ).to eq(%w(
+        test.a.1.com
+        test.a.2.com
+        test.b.1.com
+        test.b.2.com
+        test.c.1.com
+        test.c.2.com
+      ))
+    end
+
+    it 'can expand a range' do
+      expect(
+        Globs.expand('test.{a..c}.{1, 2}.com')
+      ).to eq(%w(
+        test.a.1.com
+        test.a.2.com
+        test.b.1.com
+        test.b.2.com
+        test.c.1.com
+        test.c.2.com
+      ))
+    end
   end
 
-  it 'can expand a single set' do
-    expect(
-      Globs.expand('test.{a, b, c}.com')
-    ).to eq(%w(
-      test.a.com
-      test.b.com
-      test.c.com
-    ))
-  end
-
-  it 'can expand multiple sets' do
-    expect(
-      Globs.expand('test.{a, b, c}.{1, 2}.com')
-    ).to eq(%w(
-      test.a.1.com
-      test.a.2.com
-      test.b.1.com
-      test.b.2.com
-      test.c.1.com
-      test.c.2.com
-    ))
-  end
-
-  it 'can expand a range' do
-    expect(
-      Globs.expand('test.{a..c}.{1, 2}.com')
-    ).to eq(%w(
-      test.a.1.com
-      test.a.2.com
-      test.b.1.com
-      test.b.2.com
-      test.c.1.com
-      test.c.2.com
-    ))
+  context "C version" do
+    it 'should compile' do
+      expect( Globs.cprint 'test.{a..c}.{1, 2}.com' ).to include('Printed from C')
+    end
   end
 end

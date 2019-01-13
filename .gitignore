@@ -12,3 +12,7 @@
 
 # compiled gems
 *.gem
+
+# compiled files
+lib/cglobs.so
+lib/cglobs.bundle

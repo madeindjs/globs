@@ -1,4 +1,6 @@
 require "globs/version"
+require "cglobs"
+
 
 # Container for Globs methods, currently only static as the public api
 # footprint is relatively small.
