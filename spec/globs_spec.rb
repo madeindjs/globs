@@ -46,9 +46,19 @@ RSpec.describe Globs do
   end
 
   context "C version" do
-    
+
     it 'does not expand a normal string' do
       expect(Globs.expands_c('a_normal_string')).to eq(%w(a_normal_string))
+    end
+
+    it 'can expand a single set' do
+      expect(
+        Globs.expands_c('test.{a, b, c}.com')
+      ).to eq(%w(
+        test.a.com
+        test.b.com
+        test.c.com
+      ))
     end
 
   end
