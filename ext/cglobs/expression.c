@@ -4,12 +4,13 @@
 
 #include "expression.h"
 
-int get_group(const char *source) {
-  get_matches(source, "(.*)\\{(.*)\\}(.*)");
+int get_group(const char *source, VALUE *ruby_array) {
+  get_matches(source, "(.*)\\{(.*)\\}(.*)", ruby_array);
   return EXIT_SUCCESS;
 }
 
-int get_matches(const char *source, const char *regexString) {
+int get_matches(const char *source, const char *regexString,
+                VALUE *ruby_array) {
   size_t maxMatches = 2;
   size_t maxGroups = 3;
   unsigned int g, m, offset;
@@ -35,17 +36,26 @@ int get_matches(const char *source, const char *regexString) {
     m = g = offset = 0;
 
     for (g = 0; g < maxGroups; g++) {
-      if (groupArray[g].rm_so == (size_t)-1)
+      regmatch_t group_regmatch = groupArray[g];
+
+      if (group_regmatch.rm_so == (size_t)-1)
         break; // No more groups
 
-      if (g == 0)
-        offset = groupArray[g].rm_eo;
+      if (g == 0) {
+        offset = group_regmatch.rm_eo;
+      }
 
       char cursorCopy[strlen(cursor) + 1];
       strcpy(cursorCopy, cursor);
-      cursorCopy[groupArray[g].rm_eo] = 0;
-      printf("Match %u, Group %u: [%2u-%2u]: %s\n", m, g, groupArray[g].rm_so,
-             groupArray[g].rm_eo, cursorCopy + groupArray[g].rm_so);
+      cursorCopy[group_regmatch.rm_eo] = 0;
+
+      char *matched_string = cursorCopy + group_regmatch.rm_so;
+
+      printf("Match %u, Group %u: [%2u-%2u]: %s\n", m, g, group_regmatch.rm_so,
+             group_regmatch.rm_eo, matched_string);
+
+      VALUE str_value_str = rb_str_new2(matched_string);
+      rb_ary_push(ruby_array, str_value_str);
     }
     cursor += offset;
   }

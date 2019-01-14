@@ -77,10 +77,8 @@ VALUE rb_globs_expand(VALUE self, VALUE str) {
   }
 
   // extract string value from VALUE
-  VALUE str_value_str = rb_str_new2(str_value);
-  rb_ary_push(array, str_value_str);
 
-  get_group(str_value);
+  get_group(str_value, array);
 
   return array;
 }

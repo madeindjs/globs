@@ -8,7 +8,7 @@
  * @param  source      the string to search
  * @return             status
  */
-int get_group(const char *source);
+int get_group(const char *source, VALUE *ruby_array);
 
 /**
  * Search all matching string with a given REGEX
@@ -18,6 +18,6 @@ int get_group(const char *source);
  * @param  regexString a valid REGEX string
  * @return             status
  */
-int get_matches(const char *source, const char *regexString);
+int get_matches(const char *source, const char *regexString, VALUE *ruby_array);
 
 #endif
