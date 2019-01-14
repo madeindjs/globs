@@ -1,8 +1,9 @@
+#include <regex.h>
 #include <ruby.h>
 
-#include <regex.h>
-
 #include "expression.h"
+#define MAX_MATCHES 2
+#define MAX_GROUPS 3
 
 int get_group(const char *source, VALUE *ruby_array) {
   get_matches(source, "(.*)\\{(.*)\\}(.*)", ruby_array);
@@ -11,12 +12,10 @@ int get_group(const char *source, VALUE *ruby_array) {
 
 int get_matches(const char *source, const char *regexString,
                 VALUE *ruby_array) {
-  size_t maxMatches = 2;
-  size_t maxGroups = 3;
   unsigned int g, m, offset;
 
   regex_t regexCompiled;
-  regmatch_t groupArray[maxGroups];
+  regmatch_t groupArray[MAX_GROUPS];
   char *cursor;
 
   if (regcomp(&regexCompiled, regexString, REG_EXTENDED)) {
@@ -27,15 +26,15 @@ int get_matches(const char *source, const char *regexString,
 
   m = 0;
   cursor = source;
-  for (m = 0; m < maxMatches; m++) {
-    if (regexec(&regexCompiled, cursor, maxGroups, groupArray, 0)) {
+  for (m = 0; m < MAX_MATCHES; m++) {
+    if (regexec(&regexCompiled, cursor, MAX_GROUPS, groupArray, 0)) {
       printf("No more matches.\n");
       break; // No more matches
     }
 
     m = g = offset = 0;
 
-    for (g = 0; g < maxGroups; g++) {
+    for (g = 0; g < MAX_GROUPS; g++) {
       regmatch_t group_regmatch = groupArray[g];
 
       if (group_regmatch.rm_so == (size_t)-1)
