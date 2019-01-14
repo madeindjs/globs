@@ -1,9 +1,7 @@
-#include <regex.h>
 #include <ruby.h>
 #include <string.h>
 
-#include "lib/expression.h"
-
+#include "expression.h"
 
 /**
  * Split a string
@@ -73,19 +71,16 @@ VALUE rb_globs_expand(VALUE self, VALUE str) {
   VALUE array = rb_ary_new();
   const char *str_value = RSTRING_PTR(str);
 
-  // get_matches("___ abc123def ___ ghi456 ___", "[a-z]*([0-9]+)([a-z]*)");
-
   // return an empty array if not a string
   if (RB_TYPE_P(str, T_STRING) != 1) {
     return array;
   }
 
   // extract string value from VALUE
+  VALUE str_value_str = rb_str_new2(str_value);
+  rb_ary_push(array, str_value_str);
 
-  printf("Azer.\n");
-
-  say_hello();
-  // get_matches(str_value, ".*\\{(.*)\\}.*");
+  get_matches(str_value, ".*\\{(.*)\\}.*");
 
   return array;
 }

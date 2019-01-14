@@ -1,10 +1,8 @@
-#include "expresion.h"
+#include <ruby.h>
 
+#include <regex.h>
 
-
-void say_hello(){
-  printf("expression loaded%s\n" );
-}
+#include "expression.h"
 
 /**
  * @see https://gist.github.com/ianmackinnon/3294587
