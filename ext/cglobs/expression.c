@@ -4,10 +4,11 @@
 
 #include "expression.h"
 
-/**
- * @see https://gist.github.com/ianmackinnon/3294587
- * @return [description]
- */
+int get_group(const char *source) {
+  get_matches(source, "(.*)\\{(.*)\\}(.*)");
+  return EXIT_SUCCESS;
+}
+
 int get_matches(const char *source, const char *regexString) {
   size_t maxMatches = 2;
   size_t maxGroups = 3;
