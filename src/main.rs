@@ -1,3 +1,9 @@
+mod lib;
+
 fn main() {
-    println!("Hello, world!");
+    let expands: Vec<String> = lib::expands("Hello, world!");
+
+    for item in expands {
+        println!("{}", item);
+    }
 }
