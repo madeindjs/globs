@@ -1,0 +1,13 @@
+name: globs
+version: 0.1.0
+
+authors:
+  - Alexandre Rousseau <contact@rousseau-alexandre.fr>
+
+targets:
+  globs:
+    main: src/globs.cr
+
+crystal: 0.27.0
+
+license: MIT
