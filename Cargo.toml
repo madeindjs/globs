@@ -1,0 +1,7 @@
+[package]
+name = "globs"
+version = "0.1.0"
+authors = ["Alexandre Rousseau <contact@rousseau-alexandre.Fr>"]
+edition = "2018"
+
+[dependencies]
