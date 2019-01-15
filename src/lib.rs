@@ -7,19 +7,25 @@ pub fn expands(expandable: &str) -> Vec<String> {
 
     let re: Regex = Regex::new(r"\{(([A-z]+,?)+)\}").unwrap();
 
-    println!(
-        "Expands '{}' match ?: {}",
-        expandable,
-        re.is_match(expandable)
-    );
-
-    for cap in re.captures_iter(expandable) {
-        println!("Month: {}", &cap[0]);
+    if !re.is_match(expandable) {
+        expands.push(expandable.to_string());
     }
 
-    expands.push(expandable.to_string());
+    for cap in re.captures_iter(expandable) {
+        let group: &str = &cap[0];
+        let group_without_brackets: &str = &cap[1];
+
+        for item in expands_group(group_without_brackets) {
+            let expand: String = expandable.replace(group, item);
+            expands.push(expand);
+        }
+    }
 
     return expands;
+}
+
+fn expands_group(group_without_brackets: &str) -> Vec<&str> {
+    group_without_brackets.split(",").collect()
 }
 
 #[cfg(test)]
@@ -30,9 +36,13 @@ mod tests {
     }
 
     #[test]
-    fn no_matches() {
-        let input = "https://{qwant,duckduckgo}.com/";
-        let expected = vec!["https://qwant.com/", "https://duckduckgo.com/"];
+    fn with_a_simple_group() {
+        let input = "https://{qwant,duckduckgo,startpage}.com/";
+        let expected = vec![
+            "https://qwant.com/",
+            "https://duckduckgo.com/",
+            "https://startpage.com/",
+        ];
 
         assert_eq!(expected, super::expands(input));
     }
