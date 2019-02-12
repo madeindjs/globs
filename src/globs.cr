@@ -62,22 +62,22 @@ module Globs
     results = [""] of String
 
     until scanner.eos?
-      beginning = scanner.pos
-      start, finish = next_expression_positions!(scanner)
+      beginning = scanner.offset
+      start, finish = self.next_expression_positions(scanner)
 
       # There are no further expressions in the string if the start position is
       # negative.
       #
       # Proceed to move the scanner"s cursor to the end of the string and take
       # the rest of the string to append to the current result items.
-      if start.negative?
-        scanner.pos = string.size
+      if start > 0
+        scanner.offset = string.size
 
         non_glob_str = string[beginning..END_OF_STRING]
         expressions = [""]
       else
         non_glob_str = string[beginning..(start - POSITION_OFFSET)]
-        expressions = interpret_expression(string[start..finish])
+        expressions = self.interpret_expression(string[start..finish])
       end
 
       results = results.flat_map { |res|
@@ -110,12 +110,12 @@ module Globs
   #
   # @return [Array[Integer, Integer]]
   #   Starting and ending positions of the next expression, excluding braces
-  private def next_expression_positions!(scanner)
+  private def self.next_expression_positions(scanner)
     return [END_OF_STRING, END_OF_STRING] unless scanner.scan_until(OPENING_BRACE)
-    start = scanner.pos
+    start = scanner.offset
 
     return [start, END_OF_STRING] unless scanner.scan_until(CLOSING_BRACE)
-    finish = scanner.pos
+    finish = scanner.offset
 
     [start, finish - POSITION_OFFSET]
   end
@@ -130,11 +130,17 @@ module Globs
   # @return [Array[String]]
   #   Collection of permutable strings to iterate over when constructing a
   #   final glob set
-  private def interpret_expression(string)
-    string
+  private def self.interpret_expression(string : String) : (Array(NoReturn) | Array(String))
+    return string
       .split(/, */)
       .flat_map { |exp|
-        exp.include?("..") ? Range.new(*exp.split("..")).to_a : exp
+        range  = exp.split("..")
+
+        if range.size() > 0
+          return Range.new(range.first, range.last).to_a
+        else
+          return [exp]
+        end
       }
   end
 end
