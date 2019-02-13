@@ -9,11 +9,19 @@ describe Globs do
     Globs.expand("a_normal_string").should eq(%w(a_normal_string))
   end
 
-  it "can expand a single set" do
+  it "can expand a single group set" do
     Globs.expand("test.{a, b, c}.com").should eq(%w(
       test.a.com
       test.b.com
       test.c.com
+    ))
+  end
+
+  it "can expand a single range set" do
+    Globs.expand("test.{1..3}.com").should eq(%w(
+      test.1.com
+      test.2.com
+      test.3.com
     ))
   end
 

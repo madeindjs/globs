@@ -12,7 +12,7 @@ module Globs
       patern = scanner.scan_until(Globs::CLOSING_BRACE)
 
       if patern.is_a? String
-        complete_patern = "#{patern}#{Globs::CLOSING_BRACE_CHAR}"
+        complete_patern = "#{Globs::OPENING_BRACE_CHAR}#{patern}"
         patern = patern.chomp(Globs::CLOSING_BRACE_CHAR)
         return Patern.new(patern).expand.map { |expand|
           @content.gsub(complete_patern, expand)

@@ -13,6 +13,7 @@ module Globs
   CLOSING_BRACE_CHAR = '}'
 
   PATERN_SEPARATOR = ','
+  RANGE_SEPARATOR  = ".."
 
   # Shorthand for `puts expand(str)` for outputting to STDOUT for
   # unix-like piping.
