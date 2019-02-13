@@ -1,4 +1,5 @@
 name: globs
+description: Expands glob-like strings into array sets.
 version: 0.1.0
 
 authors:

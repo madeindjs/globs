@@ -2,35 +2,32 @@
 
 Expands glob-like strings into array sets.
 
+> This a Crystal version of [baweaver/globs](https://github.com/baweaver/globs) initially written in Ruby.
+
 If you've ever seen a string like this:
 
-```ruby
-"hostname.{west, east, north}.{100..150}.com"
-```
+    hostname.{west, east, north}.{100..150}.com
 
-...and wished that there were a way to have that expand to all 153 urls without
-having to type out a bunch of arbitrarily deep map statements this gem is for you.
+...and wished that there were a way to have that expand to all 153 urls without having to type out a bunch of arbitrarily deep map statements this shards is for you.
 
-Why is this handy? If you have to type out a whole load of AWS names this can
-be a lot nicer to type and iterate over to perform actions.
+Why is this handy? If you have to type out a whole load of AWS names this can be a lot nicer to type and iterate over to perform actions.
 
-## Usage
+## Expressions
 
 ### Sets
 
+## Usage
+
 A set is defined as a set of comma delimited items inside brackets:
 
-```ruby
-"{1, 2, 3}"
-```
+    {1, 2, 3}
 
-In Globs, this would expand to the array `[1, 2, 3]`. The difference is if there
-happen to be multiple globs present it will expand those items:
+In Globs, this would expand to the array `[1, 2, 3]`. The difference is if there happen to be multiple globs present it will expand those items:
 
-```ruby
+~~~crystal
 Globs.expand("test.{a, b}.{1, 2}.com")
 => ["test.a.1.com", "test.a.2.com", "test.b.1.com", "test.b.2.com"]
-```
+~~~
 
 These sets can be as long or as short as you would like.
 
@@ -38,41 +35,59 @@ These sets can be as long or as short as you would like.
 
 Use inclusive (`..`) ranges to shorten consecutive elements in a Globs string:
 
-```ruby
+~~~crystal
 Globs.expand("test.{a..e}.com")
 => ["test.a.com", "test.b.com", "test.c.com", "test.d.com", "test.e.com"]
-```
+~~~
 
-## Installation
+## Instalation
 
-Add this line to your application's Gemfile:
+### Librairy
 
-```ruby
-gem 'globs'
-```
+1. Add the dependency to your `shard.yml`:
 
-And then execute:
+~~~yaml
+dependencies:
+ lapp:
+   github: madeindjs/glob
+~~~
 
-    $ bundle
+2. Run `shards install`
 
-Or install it yourself as:
+### CLI
 
-    $ gem install globs
+Clone and compile yoursel
 
-## Development
+~~~bash
+$ git clone https://github.com/madeindjs/globs
+$ cd globs
+$ crystal build bin/globs.cr --release
+~~~
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+Then you can simply use like this:
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+~~~bash
+$ ./globs "http://{a,b}.{1..3}.org"
+http://a.1.org
+http://a.2.org
+http://a.3.org
+http://b.1.org
+http://b.2.org
+http://b.3.org
+~~~
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/baweaver/globs. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+1. Fork it (<https://github.com/madeindjs/globs/fork>)
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create a new Pull Request
+
+## Contributors
+
+- [Alexandre Rousseau](https://github.com/madeindjs) - creator and maintainer
 
 ## License
 
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
-
-## Code of Conduct
-
-Everyone interacting in the Globs project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/baweaver/globs/blob/master/CODE_OF_CONDUCT.md).
