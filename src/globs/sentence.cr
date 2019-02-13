@@ -1,10 +1,12 @@
 require "string_scanner"
 
 module Globs
+  # A stentence is a text who contains (or not) somes `Patern`'s to expands
   class Sentence
     def initialize(@content : String)
     end
 
+    # Get all possibilities of this setence and expands all containing `Patern`'s
     def expand : Array(String)
       scanner = StringScanner.new(@content)
 
