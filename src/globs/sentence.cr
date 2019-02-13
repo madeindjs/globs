@@ -24,19 +24,22 @@ module Globs
       paterns = [] of Patern
       expands = [@content]
 
-      # TODO: add while here
-      first = scanner.scan_until(OPENING_BRACE)
-      patern = scanner.scan_until(CLOSING_BRACE)
+      until scanner.eos?
+        first = scanner.scan_until(OPENING_BRACE)
+        patern = scanner.scan_until(CLOSING_BRACE)
 
-      if patern.is_a? String
-        complete_patern = "#{OPENING_BRACE_CHAR}#{patern}"
-        paterns << Patern.new(patern.chomp(CLOSING_BRACE_CHAR))
+        break if patern.nil?
+
+        if patern.is_a? String
+          complete_patern = "#{OPENING_BRACE_CHAR}#{patern}"
+          paterns << Patern.new(patern.chomp(CLOSING_BRACE_CHAR))
+        end
       end
 
       paterns.each do |patern|
-        expands.each do |expand|
-          expands += patern.replace(expand)
-        end
+        expands = expands.map do |expand|
+          patern.replace(expand)
+        end.flatten
         # return Patern.new(patern).expand.map { |expand|
         # @content.gsub(complete_patern, expand)
         # }
