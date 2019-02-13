@@ -12,6 +12,8 @@ module Globs
     # A Char to find a ending of a `Patern`
     CLOSING_BRACE_CHAR = '}'
 
+    content : String
+
     def initialize(@content : String)
     end
 
@@ -19,18 +21,31 @@ module Globs
     def expand : Array(String)
       scanner = StringScanner.new(@content)
 
+      paterns = [] of Patern
+      expands = [@content]
+
+      # TODO: add while here
       first = scanner.scan_until(OPENING_BRACE)
       patern = scanner.scan_until(CLOSING_BRACE)
 
       if patern.is_a? String
         complete_patern = "#{OPENING_BRACE_CHAR}#{patern}"
-        patern = patern.chomp(CLOSING_BRACE_CHAR)
-        return Patern.new(patern).expand.map { |expand|
-          @content.gsub(complete_patern, expand)
-        }
+        paterns << Patern.new(patern.chomp(CLOSING_BRACE_CHAR))
       end
 
-      return [@content]
+      paterns.each do |patern|
+        expands.each do |expand|
+          expands += patern.replace(expand)
+        end
+        # return Patern.new(patern).expand.map { |expand|
+        # @content.gsub(complete_patern, expand)
+        # }
+      end
+
+      return expands
+    end
+
+    private def walk_to_next_patern
     end
   end
 end
