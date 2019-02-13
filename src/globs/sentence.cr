@@ -3,6 +3,15 @@ require "string_scanner"
 module Globs
   # A stentence is a text who contains (or not) somes `Patern`'s to expands
   class Sentence
+    # A REGEX to find a beginning of a `Patern`
+    OPENING_BRACE = /\{/
+    # A Char to find a beginning of a `Patern`
+    OPENING_BRACE_CHAR = '{'
+    # A REGEX to find an ending of a `Patern`
+    CLOSING_BRACE = /\}/
+    # A Char to find a ending of a `Patern`
+    CLOSING_BRACE_CHAR = '}'
+
     def initialize(@content : String)
     end
 
@@ -10,12 +19,12 @@ module Globs
     def expand : Array(String)
       scanner = StringScanner.new(@content)
 
-      first = scanner.scan_until(Globs::OPENING_BRACE)
-      patern = scanner.scan_until(Globs::CLOSING_BRACE)
+      first = scanner.scan_until(OPENING_BRACE)
+      patern = scanner.scan_until(CLOSING_BRACE)
 
       if patern.is_a? String
-        complete_patern = "#{Globs::OPENING_BRACE_CHAR}#{patern}"
-        patern = patern.chomp(Globs::CLOSING_BRACE_CHAR)
+        complete_patern = "#{OPENING_BRACE_CHAR}#{patern}"
+        patern = patern.chomp(CLOSING_BRACE_CHAR)
         return Patern.new(patern).expand.map { |expand|
           @content.gsub(complete_patern, expand)
         }

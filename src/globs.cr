@@ -15,19 +15,6 @@ require "string_scanner"
 module Globs
   VERSION = "0.1.0"
 
-  # A REGEX to find a beginning of a `Patern`
-  OPENING_BRACE = /\{/
-  # A Char to find a beginning of a `Patern`
-  OPENING_BRACE_CHAR = '{'
-  # A REGEX to find an ending of a `Patern`
-  CLOSING_BRACE = /\}/
-  # A Char to find a ending of a `Patern`
-  CLOSING_BRACE_CHAR = '}'
-  # Represent a separator for group `Patern` (ex: `1,2,3`)
-  GROUP_SEPARATOR = ','
-  # Represent a separator for range `Patern` (ex: `1...3`)
-  RANGE_SEPARATOR = ".."
-
   # Shorthand for `puts expand(str)` for outputting to STDOUT for
   # unix-like piping.
   #
